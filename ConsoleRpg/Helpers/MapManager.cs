@@ -35,55 +35,62 @@ public class MapManager
     }
 
     public void DisplayMap()
+{
+    var mapBuilder = new StringBuilder();
+    mapBuilder.AppendLine("Map:");
+
+    // Clear map grid
+    for (var i = 0; i < GridRows; i++)
     {
-        var mapBuilder = new StringBuilder();
-        mapBuilder.AppendLine("Map:");
-
-        // Clear map grid
-        for (var i = 0; i < GridRows; i++)
+        for (var j = 0; j < GridCols; j++)
         {
-            for (var j = 0; j < GridCols; j++)
-            {
-                _mapGrid[i, j] = "       ";
-            }
+            _mapGrid[i, j] = "       ";
         }
+    }
 
-        // Place the current room and its neighbors
-        if (_currentRoom != null)
-        {
-            var startRow = GridRows / 2;
-            var startCol = GridCols / 2;
-            PlaceRoom(_currentRoom, startRow, startCol);
-        }
+    // Place the current room and its neighbors
+    if (_currentRoom != null)
+    {
+        var startRow = GridRows / 2;
+        var startCol = GridCols / 2;
+        PlaceRoom(_currentRoom, startRow, startCol);
+    }
 
-        // Build the map grid row by row
-        for (var i = 0; i < GridRows; i++)
+    // Build the map grid row by row
+    for (var i = 0; i < GridRows; i++)
+    {
+        for (var j = 0; j < GridCols; j++)
         {
-            for (var j = 0; j < GridCols; j++)
+            var cellContent = _mapGrid[i, j];
+
+            // Check for room indicators and handle them
+            if (cellContent.Contains("[") && cellContent.Contains("]"))
             {
-                if (_mapGrid[i, j].Contains("[") && _mapGrid[i, j].Contains("]"))
+                var roomName = Markup.Escape(cellContent);
+
+                // Ensure the substring doesn't go out of bounds
+                var currentRoomName = _currentRoom.Name.Length > RoomNameLength ? _currentRoom.Name.Substring(0, RoomNameLength) : _currentRoom.Name;
+                var roomIndicator = $"[{currentRoomName}]";
+
+                if (cellContent.Equals(roomIndicator, StringComparison.OrdinalIgnoreCase))
                 {
-                    var roomName = Markup.Escape(_mapGrid[i, j]);
-                    if (_mapGrid[i, j] == $"[{_currentRoom.Name.Substring(0, RoomNameLength)}]")
-                    {
-                        mapBuilder.Append($"[yellow]{roomName,-7}[/]");
-                    }
-                    else
-                    {
-                        mapBuilder.Append($"[white]{roomName,-7}[/]");
-                    }
+                    mapBuilder.Append($"[yellow]{roomName,-7}[/]");
                 }
                 else
                 {
-                    mapBuilder.Append($"[dim]{Markup.Escape(_mapGrid[i, j]),-7}[/]");
+                    mapBuilder.Append($"[white]{roomName,-7}[/]");
                 }
             }
-
-            mapBuilder.AppendLine();
+            else
+            {
+                mapBuilder.Append($"[dim]{Markup.Escape(cellContent),-7}[/]");
+            }
         }
-
-        _outputManager.UpdateMapContent(mapBuilder.ToString());
+        mapBuilder.AppendLine();
     }
+
+    _outputManager.UpdateMapContent(mapBuilder.ToString());
+}
 
 
 
@@ -98,40 +105,40 @@ public class MapManager
     }
 
     private void PlaceRoom(Room room, int row, int col)
+{
+    if (_mapGrid[row, col] != "       ")
     {
-        if (_mapGrid[row, col] != "       ")
-        {
-            return;
-        }
-
-        var roomName = room.Name.Length > RoomNameLength
-            ? room.Name.Substring(0, RoomNameLength)
-            : room.Name.PadRight(RoomNameLength);
-
-        _mapGrid[row, col] = $"[{roomName}]";
-
-        if (room.North != null && row > 1)
-        {
-            _mapGrid[row - 1, col] = "   |   ";
-            PlaceRoom(room.North, row - 2, col);
-        }
-
-        if (room.South != null && row < GridRows - 2)
-        {
-            _mapGrid[row + 1, col] = "   |   ";
-            PlaceRoom(room.South, row + 2, col);
-        }
-
-        if (room.East != null && col < GridCols - 2)
-        {
-            _mapGrid[row, col + 1] = "  ---  ";
-            PlaceRoom(room.East, row, col + 2);
-        }
-
-        if (room.West != null && col > 1)
-        {
-            _mapGrid[row, col - 1] = "  ---  ";
-            PlaceRoom(room.West, row, col - 2);
-        }
+        return;
     }
+
+    var roomName = room.Name.Length > RoomNameLength
+        ? room.Name.Substring(0, RoomNameLength)
+        : room.Name.PadRight(RoomNameLength);
+
+    _mapGrid[row, col] = $"[{roomName}]";
+
+    if (room.North != null && row > 1)
+    {
+        _mapGrid[row - 1, col] = "   |   ";
+        PlaceRoom(room.North, row - 2, col);
+    }
+
+    if (room.South != null && row < GridRows - 2)
+    {
+        _mapGrid[row + 1, col] = "   |   ";
+        PlaceRoom(room.South, row + 2, col);
+    }
+
+    if (room.East != null && col < GridCols - 2)
+    {
+        _mapGrid[row, col + 1] = "  ---  ";
+        PlaceRoom(room.East, row, col + 2);
+    }
+
+    if (room.West != null && col > 1)
+    {
+        _mapGrid[row, col - 1] = "  ---  ";
+        PlaceRoom(room.West, row, col - 2);
+    }
+}
 }
