@@ -1,4 +1,5 @@
-﻿namespace ConsoleRpg.Helpers;
+﻿using ConsoleRpg.Services;
+namespace ConsoleRpg.Helpers;
 
 public class MenuManager
 {
@@ -8,11 +9,12 @@ public class MenuManager
     {
         _outputManager = outputManager;
     }
+
     public bool ShowMainMenu()
     {
         _outputManager.AddLogEntry("Welcome to the RPG Game!");
         _outputManager.AddLogEntry("1. Start Game");
-        _outputManager.AddLogEntry("2. Exit");
+        _outputManager.AddLogEntry("0. Exit");
 
         return HandleMainMenuInput();
     }
@@ -27,14 +29,15 @@ public class MenuManager
                 case "1":
                     _outputManager.AddLogEntry("Starting game...");
                     return true;
-                case "2":
+                case "0":
                     _outputManager.AddLogEntry("Exiting game...");
                     Environment.Exit(0);
                     return false;
                 default:
-                    _outputManager.AddLogEntry("Invalid selection. Please choose 1 or 2.");
+                    _outputManager.AddLogEntry("Invalid selection. Please choose a valid option.");
                     break;
             }
         }
     }
 }
+

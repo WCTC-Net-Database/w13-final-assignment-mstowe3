@@ -1,4 +1,5 @@
 ﻿using ConsoleRpgEntities.Models.Attributes;
+using ConsoleRpgEntities.Models.Rooms;
 
 namespace ConsoleRpgEntities.Models.Characters.Monsters
 {
@@ -9,6 +10,8 @@ namespace ConsoleRpgEntities.Models.Characters.Monsters
         public int Health { get; set; }
         public int AggressionLevel { get; set; }
         public string MonsterType { get; set; }
-        
+        public virtual Room Room { get; set; }
+        public virtual int? RoomId { get; set; }
+
     }
 }

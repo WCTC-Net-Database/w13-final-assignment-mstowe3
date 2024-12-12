@@ -14,7 +14,7 @@ public class MapManager
     private readonly string[,] _mapGrid;
     private readonly GameContext _context;
     private readonly OutputManager _outputManager;
-    private Room _currentRoom;
+    public Room _currentRoom;
 
     public MapManager(GameContext context, OutputManager outputManager)
     {
@@ -28,10 +28,10 @@ public class MapManager
     {
         // Fetch the initial room based on its ID
         _currentRoom = _context.Set<Room>().Include(r => r.North)
-                                             .Include(r => r.South)
-                                             .Include(r => r.East)
-                                             .Include(r => r.West)
-                                             .FirstOrDefault(r => r.Id == roomId);
+                                            .Include(r => r.South)
+                                            .Include(r => r.East)
+                                            .Include(r => r.West)
+                                            .FirstOrDefault(r => r.Id == roomId);
     }
 
     public void DisplayMap()
@@ -91,10 +91,10 @@ public class MapManager
     {
         // Update current room based on new ID and refresh relationships
         _currentRoom = _context.Set<Room>().Include(r => r.North)
-                                             .Include(r => r.South)
-                                             .Include(r => r.East)
-                                             .Include(r => r.West)
-                                             .FirstOrDefault(r => r.Id == roomId);
+                                            .Include(r => r.South)
+                                            .Include(r => r.East)
+                                            .Include(r => r.West)
+                                            .FirstOrDefault(r => r.Id == roomId);
     }
 
     private void PlaceRoom(Room room, int row, int col)

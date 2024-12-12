@@ -1,4 +1,4 @@
-﻿using ConsoleRpgEntities.Models.Abilities.PlayerAbilities;
+﻿﻿using ConsoleRpgEntities.Models.Abilities.PlayerAbilities;
 using ConsoleRpgEntities.Models.Characters;
 using ConsoleRpgEntities.Models.Characters.Monsters;
 using ConsoleRpgEntities.Models.Equipments;
@@ -23,13 +23,14 @@ namespace ConsoleRpgEntities.Data
         {
             // Configure TPH for Character hierarchy
             modelBuilder.Entity<Monster>()
-                .HasDiscriminator<string>(m=> m.MonsterType)
+                .HasDiscriminator<string>(m => m.MonsterType)
                 .HasValue<Goblin>("Goblin");
 
             // Configure TPH for Ability hierarchy
             modelBuilder.Entity<Ability>()
-                .HasDiscriminator<string>(pa=>pa.AbilityType)
-                .HasValue<ShoveAbility>("ShoveAbility");
+                .HasDiscriminator<string>(pa => pa.AbilityType)
+                .HasValue<ShoveAbility>("ShoveAbility")
+                .HasValue<SmashAbility>("SmashAbility");
 
             // Configure many-to-many relationship
             modelBuilder.Entity<Player>()
@@ -39,6 +40,9 @@ namespace ConsoleRpgEntities.Data
 
             // Call the separate configuration method to set up Equipment entity relationships
             ConfigureEquipmentRelationships(modelBuilder);
+
+            // Seed initial data
+            SeedData(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -76,7 +80,21 @@ namespace ConsoleRpgEntities.Data
             // (Weapon or Armor) will simply nullify the WeaponId or ArmorId in Equipment rather than 
             // cascading a delete through multiple paths.
         }
+
+        private void SeedData(ModelBuilder modelBuilder)
+        {
+            // Seed some initial rooms
+            modelBuilder.Entity<Room>().HasData(
+                new Room { Id = 1, Name = "Starter Room", Description = "This is the starter room." }
+            );
+
+            // Seed some initial players
+            modelBuilder.Entity<Player>().HasData(
+                new Player { Id = 1, Name = "Hero", Health = 100, Experience = 0, RoomId = 1 },
+                new Player { Id = 2, Name = "Mage", Health = 80, Experience = 20, RoomId = 1 }
+            );
+
+            // Add more seed data as needed for other tables
+        }
     }
 }
-
-

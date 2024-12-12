@@ -1,4 +1,4 @@
-﻿using ConsoleRpgEntities.Models.Characters;
+﻿﻿using ConsoleRpgEntities.Models.Characters;
 
 namespace ConsoleRpgEntities.Models.Abilities.PlayerAbilities;
 

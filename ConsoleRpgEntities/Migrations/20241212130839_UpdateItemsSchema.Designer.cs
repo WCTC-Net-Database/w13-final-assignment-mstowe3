@@ -4,6 +4,7 @@ using ConsoleRpgEntities.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConsoleRpgEntities.Migrations
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20241212130839_UpdateItemsSchema")]
+    partial class UpdateItemsSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,24 +134,6 @@ namespace ConsoleRpgEntities.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("Players");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Experience = 0,
-                            Health = 100,
-                            Name = "Hero",
-                            RoomId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Experience = 20,
-                            Health = 80,
-                            Name = "Mage",
-                            RoomId = 1
-                        });
                 });
 
             modelBuilder.Entity("ConsoleRpgEntities.Models.Equipments.Equipment", b =>
@@ -277,14 +261,6 @@ namespace ConsoleRpgEntities.Migrations
                     b.HasIndex("WestId");
 
                     b.ToTable("Rooms");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "This is the starter room.",
-                            Name = "Starter Room"
-                        });
                 });
 
             modelBuilder.Entity("ConsoleRpgEntities.Models.Abilities.PlayerAbilities.ShoveAbility", b =>

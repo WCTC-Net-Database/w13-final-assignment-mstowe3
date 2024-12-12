@@ -1,4 +1,4 @@
-﻿using ConsoleRpgEntities.Models.Characters;
+﻿﻿using ConsoleRpgEntities.Models.Characters;
 
 namespace ConsoleRpgEntities.Models.Abilities.PlayerAbilities
 {
@@ -8,6 +8,7 @@ namespace ConsoleRpgEntities.Models.Abilities.PlayerAbilities
         public string Name { get; set; }
         public string Description { get; set; }
         public string AbilityType { get; set; }
+        public int Damage { get; set; }
 
         public virtual ICollection<Player> Players { get; set; }
     }
